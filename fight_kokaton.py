@@ -134,6 +134,14 @@ class Beam:
             screen.blit(self.img, self.rct)
 
 
+class Explosion:
+    img0 = pg.transform.rotozoom(pg.image.load("fig/explosion.gif"), 0, 2.0)
+    img = pg.transform.flip(img0, True, False)
+    exp = [img0, img]
+    def __init__(self):
+        
+
+
 class Score:
     def __init__(self):
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)  # フォントの設定
@@ -156,6 +164,7 @@ def main():
     bombs = [Bomb((255, 0, 0), 10) for i in range(NUM_OF_BOMBS)]
     beam = None
     clock = pg.time.Clock()
+    explosion= Explosion()
     score = Score()  # Scoreインスタンスの生成
     tmr = 0
     while True:
