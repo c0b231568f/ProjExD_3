@@ -155,6 +155,7 @@ def main():
     # bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255, 0, 0), 10) for i in range(NUM_OF_BOMBS)]
     beam = None
+    beams = []  # Beamクラスのインスタンスを複数扱うための空のリストを作る
     clock = pg.time.Clock()
     score = Score()  # Scoreインスタンスの生成
     tmr = 0
@@ -164,6 +165,7 @@ def main():
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                 beam = Beam(bird)
+                beams.append(beam)  # スペースキー押下でBeamインスタンス生成，リストにappend
         screen.blit(bg_img, [0, 0])
         
         for bomb in bombs:
@@ -178,21 +180,25 @@ def main():
                 return
         # if not (beam is None or bomb is None):
         for i, bomb in enumerate(bombs):
-            if beam is not None:
-                if beam.rct.colliderect(bomb.rct):  # ビームと爆弾が衝突したら
-                    beam = None
-                    bombs[i] = None
-                    bird.change_img(6, screen)
-                    score.score += 1  # スコアアップ
-                    pg.display.update()
+            for j, beam in enumerate(beams):  # リストの要素1つずつに対して爆弾と衝突判定する
+                if beams[j] is not None:
+                    if beam.rct.colliderect(bomb.rct):  # ビームと爆弾が衝突したら
+                        beams[j] = None  # 衝突した要素はNoneとする
+                        bombs[i] = None
+                        bird.change_img(6, screen)
+                        score.score += 1  # スコアアップ
+                        pg.display.update() 
         bombs = [bomb for bomb in bombs if bomb is not None]
+        beams = [beam for beam in beams if beam is not None]  # ビームリストに対して，要素がNoneでないものだけのリストに更新
+
+
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         # if bomb is not None:
         for bomb in bombs:
             bomb.update(screen)
-        if beam is not None:
+        for beam in beams:
             beam.update(screen)
         score.update(screen)  # updateメソッドを呼び出してスコアを描画
         pg.display.update()
