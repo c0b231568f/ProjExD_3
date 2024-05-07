@@ -142,6 +142,7 @@ class Score:
         self.img = self.fonto.render(f"スコア：{self.score}", 0, self.color)  # 文字列Surfaceの生成
         self.rct = self.img.get_rect()
         self.rct.center = 100, HEIGHT-50  # 文字列の中心座標
+        
     def update(self, screen: pg.surface):
         self.img = self.fonto.render(f"スコア：{self.score}", 0, self.color)  # 現在のスコアを表示させる文字列Surfaceの生成
         screen.blit(self.img, self.rct)  # スクリーンにblit
